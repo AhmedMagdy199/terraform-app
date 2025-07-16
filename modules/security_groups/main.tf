@@ -19,7 +19,7 @@ resource "aws_security_group" "alb_sg" {
   }
 }
 
-# Internal ALB Security Group (NEW - must exist to avoid reference errors)
+# Internal ALB Security Group
 resource "aws_security_group" "alb_internal_sg" {
   name   = "alb-internal-sg"
   vpc_id = var.vpc_id
@@ -40,12 +40,12 @@ resource "aws_security_group" "alb_internal_sg" {
   }
 }
 
-# Proxy Security Group (Public EC2 that acts as bastion + reverse proxy)
+# Proxy EC2 Security Group
 resource "aws_security_group" "proxy_sg" {
   name   = "proxy-sg"
   vpc_id = var.vpc_id
 
-  # Allow SSH from your public IP or 0.0.0.0/0 for testing
+  # Allow SSH (from your IP or 0.0.0.0/0 for testing)
   ingress {
     description = "Allow SSH from anywhere"
     from_port   = 22
@@ -63,6 +63,8 @@ resource "aws_security_group" "proxy_sg" {
     security_groups = [aws_security_group.alb_sg.id]
   }
 
+
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -76,25 +78,15 @@ resource "aws_security_group" "backend_sg" {
   name   = "backend-sg"
   vpc_id = var.vpc_id
 
-  # Allow HTTP from Proxy EC2
-  ingress {
-    description     = "Allow HTTP from Proxy"
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.proxy_sg.id]
-  }
-
-  # Allow HTTP from Internal ALB
   ingress {
     description     = "Allow HTTP from Internal ALB"
-    from_port       = 80
-    to_port         = 80
+    from_port       = 8080
+    to_port         = 8080
     protocol        = "tcp"
     security_groups = [aws_security_group.alb_internal_sg.id]
   }
 
-  # Allow SSH from Proxy (for bastion access)
+  # Allow SSH from Proxy (for remote login)
   ingress {
     description     = "Allow SSH from Proxy"
     from_port       = 22
