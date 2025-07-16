@@ -4,11 +4,11 @@ provider "aws" {
 }
 
 # -------------------- S3 --------------------
-module "s3_backend" {
-  source       = "./modules/s3_backend"
-  bucket_name  = "lastprojectterraformiti"
-  environment  = "dev"
-}
+# module "s3_backend" {
+ # source       = "./modules/s3_backend"
+  # bucket_name  = "lastprojectterraformiti"
+  # environment  = "dev"
+# }
 
 # -------------------- VPC --------------------
 module "vpc" {
