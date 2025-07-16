@@ -28,14 +28,13 @@ resource "aws_instance" "backend" {
 
   provisioner "file" {
     source      = "${path.module}/../../app_files/"
-    destination = "/home/ec2-user/app"
+    destination = "/home/ec2-user/app.py"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum install -y python3",
-      "cd /home/ec2-user/app",
-      "nohup python3 app.py &"
-    ]
-  }
+ provisioner "remote-exec" {
+  inline = [
+    "sudo yum install -y python3",
+    "nohup python3 /home/ec2-user/app.py &"
+  ]
+}
 }
