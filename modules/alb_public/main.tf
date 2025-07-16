@@ -17,7 +17,7 @@ resource "aws_lb_target_group" "proxy_tg" {
   vpc_id   = var.vpc_id
 }
 
-resource "aws_lb_listener" "http" {
+resource "aws_lb_listener" "public_http" {
   load_balancer_arn = aws_lb.public_alb.arn
   port              = 80
   protocol          = "HTTP"
