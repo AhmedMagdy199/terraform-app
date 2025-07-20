@@ -20,15 +20,9 @@ resource "aws_instance" "proxy" {
   connection {
     type        = "ssh"
     user        = "ec2-user"
-    private_key = file("${path.root}/my_key.pem")
+    private_key = file("D:/terraform/terraform_finalLAB/my_key.pem")
     host        = self.public_ip
   }
-
-  provisioner "file" {
-    source      = "${path.module}/nginx.conf"
-    destination = "/tmp/nginx.conf"
-  }
-
  provisioner "remote-exec" {
     inline = [
       "sleep 30",
@@ -40,21 +34,5 @@ resource "aws_instance" "proxy" {
       "sudo systemctl start nginx",
       "sudo systemctl enable nginx"
     ]
-  }
-
-  tags = {
-    Name = "proxy-${count.index + 1}"
-    Type = "proxy"
-  }
-}
-# Target group attachments for proxy instances
-resource "aws_lb_target_group_attachment" "proxy_attachments" {
-  count            = var.instance_count
-  target_group_arn = var.target_group_arn
-  target_id        = aws_instance.proxy[count.index].id
-  port             = 80
-  
-  lifecycle {
-    create_before_destroy = true
   }
 }
