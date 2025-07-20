@@ -3,13 +3,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-# -------------------- S3 --------------------
-# module "s3_backend" {
- # source       = "./modules/s3_backend"
-  # bucket_name  = "lastprojectterraformiti"
-  # environment  = "dev"
-# }
-
 # -------------------- VPC --------------------
 module "vpc" {
   source = "./modules/vpc"
@@ -96,14 +89,3 @@ resource "null_resource" "save_ips" {
   depends_on = [module.ec2_proxy, module.ec2_backend]
 }
 
-
-
-# apply it after create the s3 bucket
-
-terraform {
-  backend "s3" {
-    bucket = "lastprojectterraformiti"
-    key    = "env/dev/terraform.tfstate"
-    region = "us-east-1"
-  }
-}
