@@ -3,6 +3,16 @@
 # Terraform Deployment Script
 set -e
 
+echo "Checking prerequisites..."
+
+# Check if SSH key exists
+if [ ! -f "my_key.pem" ]; then
+    echo "ERROR: SSH key file 'my_key.pem' not found!"
+    echo "Please ensure you have your AWS key pair file in the current directory."
+    echo "Run './check-key.sh' for more details."
+    exit 1
+fi
+
 echo "Starting Terraform deployment..."
 
 # Check if backend resources exist
