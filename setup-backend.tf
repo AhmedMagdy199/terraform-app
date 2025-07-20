@@ -6,7 +6,7 @@ provider "aws" {
   region = var.aws_region
 }
 
-module "terraform_backend" {
+module "dynamodb" {
   source         = "./modules/dynamodb"
   bucket_name    = "lastprojectterraformiti"
   dynamodb_table = "terraform-state-locks"
@@ -21,8 +21,8 @@ module "terraform_backend" {
 # Output the backend configuration for reference
 output "backend_config" {
   value = {
-    bucket         = module.terraform_backend.bucket_name
-    dynamodb_table = module.terraform_backend.dynamodb_table_name
+    bucket         = module.dynamodb.bucket_name
+    dynamodb_table = module.dynamodb.dynamodb_table_name
     region         = var.aws_region
   }
 }

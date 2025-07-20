@@ -88,4 +88,3 @@ resource "null_resource" "save_ips" {
   }
   depends_on = [module.ec2_proxy, module.ec2_backend]
 }
-
