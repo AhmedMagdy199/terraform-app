@@ -1,6 +1,6 @@
 # main.tf
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 # -------------------- S3 --------------------
@@ -67,8 +67,10 @@ module "ec2_proxy" {
   source            = "./modules/ec2_proxy"
   subnet_ids        = module.subnets.public_subnets
   security_group_id = module.security_groups.proxy_sg
-  instance_count    = 2
-  key_name          = "my_key"
+  instance_count    = var.proxy_instance_count
+  key_name          = var.key_name
+  internal_alb_dns  = module.alb_internal.alb_internal_dns
+  depends_on        = [module.alb_internal]
 }
 
 # -------------------- EC2 Backend --------------------
@@ -76,8 +78,8 @@ module "ec2_backend" {
   source            = "./modules/ec2_backend"
   subnet_ids        = module.subnets.private_subnets
   security_group_id = module.security_groups.backend_sg
-  instance_count    = 2
-  key_name          = "my_key"
+  instance_count    = var.backend_instance_count
+  key_name          = var.key_name
   bastion_host      = module.ec2_proxy.public_ips[0]
 }
 

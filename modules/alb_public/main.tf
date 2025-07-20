@@ -15,6 +15,22 @@ resource "aws_lb_target_group" "proxy_tg" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
+
+  health_check {
+    enabled             = true
+    path                = "/health"
+    port                = "80"
+    protocol            = "HTTP"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    matcher             = "200"
+  }
+
+  tags = {
+    Name = "proxy-tg"
+  }
 }
 
 resource "aws_lb_listener" "public_http" {

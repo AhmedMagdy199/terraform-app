@@ -24,12 +24,19 @@ resource "aws_instance" "proxy" {
     host        = self.public_ip
   }
 
+  provisioner "file" {
+    source      = "${path.module}/nginx.conf"
+    destination = "/tmp/nginx.conf"
+  }
+
  provisioner "remote-exec" {
     inline = [
       "sleep 30",
-      "sudo amazon-linux-extras enable nginx1",
+      "sudo amazon-linux-extras enable nginx1 -y",
       "sudo yum clean metadata",
       "sudo yum install -y nginx",
+      "sudo cp /tmp/nginx.conf /etc/nginx/nginx.conf",
+      "sudo sed -i 's/INTERNAL_ALB_DNS/${var.internal_alb_dns}/g' /etc/nginx/nginx.conf",
       "sudo systemctl start nginx",
       "sudo systemctl enable nginx"
     ]

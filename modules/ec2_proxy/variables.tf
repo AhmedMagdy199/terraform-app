@@ -14,3 +14,8 @@ variable "instance_count" {
 variable "key_name" {
   type = string
 }
+
+variable "internal_alb_dns" {
+  description = "Internal ALB DNS name for backend routing"
+  type        = string
+}
