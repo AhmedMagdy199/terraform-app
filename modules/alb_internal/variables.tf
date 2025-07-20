@@ -16,4 +16,5 @@ variable "security_group_id" {
 variable "backend_instance_ids" {
   description = "List of backend EC2 instance IDs to attach to the target group"
   type        = list(string)
+  default     = []
 }

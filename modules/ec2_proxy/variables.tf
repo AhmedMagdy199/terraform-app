@@ -19,3 +19,8 @@ variable "internal_alb_dns" {
   description = "Internal ALB DNS name for backend routing"
   type        = string
 }
+variable "target_group_arn" {
+  description = "Target group ARN for proxy instances"
+  type        = string
+  default     = ""
+}

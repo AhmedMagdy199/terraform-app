@@ -43,9 +43,3 @@ resource "aws_lb_listener" "internal_http" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "backend_attachments" {
-  count            = length(var.backend_instance_ids)
-  target_group_arn = aws_lb_target_group.backend_tg.arn
-  target_id        = var.backend_instance_ids[count.index]
-  port             = 8080
-}

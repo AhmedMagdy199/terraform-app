@@ -44,10 +44,3 @@ resource "aws_lb_listener" "public_http" {
   }
 }
 
-
-resource "aws_lb_target_group_attachment" "proxy_attachments" {
-  count            = length(var.proxy_instance_ids)
-  target_group_arn = aws_lb_target_group.proxy_tg.arn
-  target_id        = var.proxy_instance_ids[count.index]
-  port             = 80
-}

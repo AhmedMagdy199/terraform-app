@@ -15,7 +15,7 @@ variable "key_name" {
   type = string
 }
 
-# Backend only
 variable "bastion_host" {
   type = string
+  default = ""
 }
